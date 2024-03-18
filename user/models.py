@@ -3,17 +3,17 @@ from django.db import models
 
 
 class User(AbstractUser):
-    email = models.EmailField("Email Address", unique=True, blank=True, null=True)
-    username = models.CharField(verbose_name="Username", max_length=100, unique=True, null=True, blank=True)
-    avatar = models.ImageField("Avatar", upload_to='users-avatar/', blank=True, null=True)
-    birthday = models.DateField("Birth Day", null=True, blank=True)
-    gender = models.CharField(max_length=255, choices=[('M', 'Male'), ('F', 'Female')], default='M')
+    email = models.EmailField("Почта", unique=True, blank=True, null=True)
+    username = models.CharField(verbose_name="Никнейм", max_length=100, unique=True, null=True, blank=True)
+    avatar = models.ImageField("Фото", upload_to='users-avatar/', blank=True, null=True)
+    birthday = models.DateField("Дата рождения", null=True, blank=True)
+    gender = models.CharField("Пол", max_length=255, choices=[('Мужской', 'Мужской'), ('Женский', 'Женский')], default='Мужской')
 
     USERNAME_FIELD = "username"
 
     class Meta:
-        verbose_name = "User"
-        verbose_name_plural = "Users"
+        verbose_name = "Пользователь"
+        verbose_name_plural = "Пользователи"
 
     def __str__(self) -> str:
         return self.get_username()
