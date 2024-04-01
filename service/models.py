@@ -1,6 +1,5 @@
 from django.db import models
 from doctor.models import Doctor
-from user.models import Patient
 
 
 class Category(models.Model):
@@ -39,7 +38,7 @@ status_choices = {
 
 
 class Visit(models.Model):
-    patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
+    # patient = models.ForeignKey(Patient, on_delete=models.CASCADE)
     doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE)
     status = models.CharField(max_length=10, choices=status_choices.items(), default='Новый')
     complaints = models.TextField(max_length=255)
@@ -49,3 +48,4 @@ class Visit(models.Model):
 
     def __str__(self):
         return f"{self.patient.__str__()} - {self.doctor.__str__()}"
+

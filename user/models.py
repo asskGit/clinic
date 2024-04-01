@@ -21,8 +21,3 @@ class User(AbstractUser):
         return self.get_username()
 
 
-class Patient(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-
-    def __str__(self) -> str:
-        return self.user.__str__()

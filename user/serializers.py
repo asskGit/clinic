@@ -9,7 +9,3 @@ class UserSerializer(serializers.ModelSerializer):
                   'email', 'photo', 'birthday', 'gender')
 
 
-class PatientSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Patient
-        fields = '__all__'

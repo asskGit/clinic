@@ -13,8 +13,7 @@ class Doctor(models.Model):
     doctor = models.OneToOneField(User, on_delete=models.CASCADE)
     tag = models.ForeignKey(Tag, on_delete=models.PROTECT, related_name="doctor_tag")
     address = models.CharField(max_length=255, default="")
-    description = models.TextField(blank=True)
-    experience = models.IntegerField(default=0, blank=True)
+    client = models.IntegerField(default=0)
 
     def __str__(self):
         return self.doctor.__str__()
