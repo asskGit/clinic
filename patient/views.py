@@ -5,6 +5,9 @@ from .serializers import *
 from datetime import datetime, time, timedelta
 from rest_framework.filters import SearchFilter, OrderingFilter
 from django_filters.rest_framework import DjangoFilterBackend
+from doctor.models import Doctor
+from django.http import Http404
+
 
 
 
@@ -23,25 +26,49 @@ class PatientViewSet(viewsets.ModelViewSet):
         if age_max:
             queryset = queryset.filter(age__lte=age_max)
 
-        # Добавляем фильтрацию по дате записи пациентов
         date_of_appointment = self.request.query_params.get('date_of_appointment', None)
         if date_of_appointment:
             queryset = queryset.filter(date_of_appointment=date_of_appointment)
 
         return queryset
 
-
     def get_serializer_class(self):
         if self.action == 'list':
             return PatientListSerializer
         return PatientSerializer
 
-    def create(self, request):
-        serializer = self.serializer_class(data=request.data)
+
+    def list_available_time_slots(self, request):
+        doctor_id = request.query_params.get('doctor_id')
+        date_of_appointment = request.query_params.get('date_of_appointment')
+        time_of_appointment = request.query_params.get('time_of_appointment')
+
+        try:
+            doctor = Doctor.objects.get(id=doctor_id)
+        except Doctor.DoesNotExist:
+            raise Http404("Doctor does not exist")
+
+        # Проверяем, есть ли уже записи пациентов на выбранное время
+        existing_appointments = Patient.objects.filter(
+            recording=doctor,
+            date_of_appointment=date_of_appointment,
+            time_of_appointment=time_of_appointment
+        )
+
+        if existing_appointments.exists():
+            return Response("Это время уже занято", status=status.HTTP_400_BAD_REQUEST)
+
+        return Response("Это время свободно", status=status.HTTP_200_OK)
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
+            # Здесь ваш код сохранения записи пациента
+
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
