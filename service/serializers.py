@@ -14,13 +14,4 @@ class ServiceSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class DoctorServiceSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = DoctorService
-        fields = '__all__'
 
-
-class VisitSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Visit
-        fields = '__all__'

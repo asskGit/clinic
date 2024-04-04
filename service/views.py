@@ -1,6 +1,6 @@
 from rest_framework import viewsets
-from .models import Category, Service, DoctorService, Visit
-from .serializers import CategorySerializer, ServiceSerializer, DoctorServiceSerializer, VisitSerializer
+from .models import Category, Service
+from .serializers import CategorySerializer, ServiceSerializer
 
 
 class CategoryViewSet(viewsets.ModelViewSet):
@@ -13,11 +13,3 @@ class ServiceViewSet(viewsets.ModelViewSet):
     serializer_class = ServiceSerializer
 
 
-class DoctorServiceViewSet(viewsets.ModelViewSet):
-    queryset = DoctorService.objects.all()
-    serializer_class = DoctorServiceSerializer
-
-
-class VisitViewSet(viewsets.ModelViewSet):
-    queryset = Visit.objects.all()
-    serializer_class = VisitSerializer

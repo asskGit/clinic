@@ -66,17 +66,37 @@ class DoctorViewSet(viewsets.ModelViewSet):
         return Response("Delete")
 
     def update(self, request, *args, **kwargs):
-        instance = self.get_object()
-        serializer = DoctorManualSerializer(instance, data=request.data)
+        doctor_instance = self.get_object()
+        user_instance = doctor_instance.doctor
+
+        user_instance.first_name = request.data.get("first_name", user_instance.first_name)
+        user_instance.last_name = request.data.get("last_name", user_instance.last_name)
+        user_instance.email = request.data.get("email", user_instance.email)
+        user_instance.birthday = request.data.get("birthday", user_instance.birthday)
+        user_instance.gender = request.data.get("gender", user_instance.gender)
+        user_instance.save()
+
+        serializer = DoctorManualSerializer(doctor_instance, data=request.data)
         if serializer.is_valid():
+            user = serializer.save()
+            user.save()
             serializer.save()
             return Response("Update successful")
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def partial_update(self, request, *args, **kwargs):
-        instance = self.get_object()
-        serializer = DoctorManualSerializer(instance, data=request.data, partial=True)
+        doctor_instance = self.get_object()
+        user_instance = doctor_instance.doctor
+
+        user_instance.first_name = request.data.get("first_name", user_instance.first_name)
+        user_instance.last_name = request.data.get("last_name", user_instance.last_name)
+        user_instance.email = request.data.get("email", user_instance.email)
+        user_instance.birthday = request.data.get("birthday", user_instance.birthday)
+        user_instance.gender = request.data.get("gender", user_instance.gender)
+        user_instance.save()
+
+        serializer = DoctorManualSerializer(doctor_instance, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response("Partial update successful")
